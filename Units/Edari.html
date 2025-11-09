@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>وضعیت حضور و داشبورد عملکرد</title>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/gaugeJS/dist/gauge.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: "Vazirmatn", sans-serif;
+      background: #f5f7fa;
+      direction: rtl;
+      margin: 0;
+      padding: 30px;
+      text-align: center;
+    }
+
+    /* --- استایل بخش اول (گیج‌ها) --- */
+    .main-gauge {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 40px;
+    }
+
+    .main-gauge .gauge-box {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      padding: 25px;
+      width: 300px;
+    }
+
+    .sub-gauges {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 25px;
+      margin-bottom: 40px;
+    }
+
+    .sub-gauges .gauge-box {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      padding: 15px;
+      width: 180px;
+    }
+
+    canvas {
+      width: 100% !important;
+      height: auto !important;
+    }
+
+    .gauge-label {
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
+      margin-top: 10px;
+    }
+
+    .gauge-value {
+      font-size: 24px;
+      font-weight: bold;
+      color: #222;
+    }
+
+    /* --- فاصله بین دو بخش --- */
+    hr {
+      margin: 60px auto;
+      width: 80%;
+      border: 0;
+      border-top: 2px solid #ccc;
+    }
+
+    /* --- استایل بخش دوم (داشبورد معاونت‌ها) --- */
+    h1 {
+      text-align: center;
+      font-weight: 600;
+      margin-bottom: 30px;
+    }
+    .section {
+      margin-bottom: 40px;
+    }
+    .section h2 {
+      margin-bottom: 15px;
+      font-size: 18px;
+      font-weight: 600;
+      border-right: 6px solid #007bff;
+      padding-right: 10px;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 15px;
+    }
+    .box {
+      background: white;
+      border-radius: 15px;
+      padding: 15px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .box-title {
+      font-size: 14px;
+      line-height: 1.4;
+      font-weight: 500;
+      color: #333;
+    }
+    .value {
+      font-weight: 600;
+      font-size: 13px;
+      color: #555;
+    }
+    .cards canvas {
+      max-width: 55px;
+      max-height: 55px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ====== بخش اول: وضعیت حضور پرسنل ====== -->
+<div class="main-gauge">
+  <div class="gauge-box">
+    <canvas id="gaugeHazerin"></canvas>
+    <div class="gauge-value" id="valueHazerin"></div>
+    <div class="gauge-label">حاضرین</div>
+  </div>
+</div>
+
+<div class="sub-gauges">
+  <div class="gauge-box">
+    <canvas id="gaugeMorakhasiSaat"></canvas>
+    <div class="gauge-value" id="valueMorakhasiSaat"></div>
+    <div class="gauge-label">مرخصی ساعتی</div>
+  </div>
+  <div class="gauge-box">
+    <canvas id="gaugeMamuriyatSaat"></canvas>
+    <div class="gauge-value" id="valueMamuriyatSaat"></div>
+    <div class="gauge-label">ماموریت ساعتی</div>
+  </div>
+  <div class="gauge-box">
+    <canvas id="gaugeMorakhasiRooz"></canvas>
+    <div class="gauge-value" id="valueMorakhasiRooz"></div>
+    <div class="gauge-label">مرخصی روزانه</div>
+  </div>
+  <div class="gauge-box">
+    <canvas id="gaugeMamuriyatRooz"></canvas>
+    <div class="gauge-value" id="valueMamuriyatRooz"></div>
+    <div class="gauge-label">ماموریت روزانه</div>
+  </div>
+</div>
+
+<!-- فاصله بین دو کد -->
+<hr>
+
+<!-- ====== بخش دوم: داشبورد معاونت‌ها و واحدهای ستادی ====== -->
+<h1>📊 داشبورد اداره‌کل اداری و پشتیبانی</h1>
+
+<div class="section">
+  <h2 style="border-color:#007bff;">👥 شاخص‌های منابع انسانی</h2>
+  <div class="cards">
+    <div class="box"><div><div class="box-title">تعداد کل کارکنان واحد</div><div class="value">42 نفر</div></div><canvas id="g1"></canvas></div>
+    <div class="box"><div><div class="box-title">مأموریت‌های ثبت‌شده (ماه اخیر)</div><div class="value">8 مورد</div></div><canvas id="g2"></canvas></div>
+    <div class="box"><div><div class="box-title">مرخصی‌های ثبت‌شده (ماه اخیر)</div><div class="value">15 مورد</div></div><canvas id="g3"></canvas></div>
+    <div class="box"><div><div class="box-title">مجموع اضافه‌کار</div><div class="value">126 ساعت</div></div><canvas id="g4"></canvas></div>
+    <div class="box"><div><div class="box-title">پست‌های بلاتصدی</div><div class="value">3 پست</div></div><canvas id="g5"></canvas></div>
+    <div class="box"><div><div class="box-title">تطبیق مدرک با پست</div><div class="value">90%</div></div><canvas id="g6"></canvas></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2 style="border-color:#28a745;">⚙️ شاخص‌های عملکرد و بهره‌وری</h2>
+  <div class="cards">
+    <div class="box"><div><div class="box-title">میانگین کارانه (ماه اخیر)</div><div class="value">31.2 میلیون تومان</div></div><canvas id="g7"></canvas></div>
+    <div class="box"><div><div class="box-title">میزان پاداش واحد</div><div class="value">11.5 میلیون تومان</div></div><canvas id="g8"></canvas></div>
+    <div class="box"><div><div class="box-title">میانگین ارزشیابی عملکرد</div><div class="value">88%</div></div><canvas id="g9"></canvas></div>
+    <div class="box"><div><div class="box-title">تحقق اهداف سالانه</div><div class="value">75%</div></div><canvas id="g10"></canvas></div>
+    <div class="box"><div><div class="box-title">نرخ جابجایی نیروها</div><div class="value">4%</div></div><canvas id="g11"></canvas></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2 style="border-color:#ffc107;">🔗 شاخص‌های هماهنگی و تعاملات</h2>
+  <div class="cards">
+    <div class="box"><div><div class="box-title">مکاتبات پاسخ‌داده‌شده به موقع</div><div class="value">94%</div></div><canvas id="g12"></canvas></div>
+    <div class="box"><div><div class="box-title">میانگین زمان پاسخ‌گویی</div><div class="value">2.3 روز</div></div><canvas id="g13"></canvas></div>
+    <div class="box"><div><div class="box-title">سطح همکاری بین‌معاونتی</div><div class="value">85%</div></div><canvas id="g14"></canvas></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2 style="border-color:#17a2b8;">💬 شاخص‌های رضایت و بازخورد</h2>
+  <div class="cards">
+    <div class="box"><div><div class="box-title">میانگین رضایت شغلی کارکنان</div><div class="value">82%</div></div><canvas id="g15"></canvas></div>
+    <div class="box"><div><div class="box-title">شکایات ثبت‌شده (ماه اخیر)</div><div class="value">4 مورد (60%)</div></div><canvas id="g16"></canvas></div>
+    <div class="box"><div><div class="box-title">بازخورد مدیران مافوق</div><div class="value">90%</div></div><canvas id="g17"></canvas></div>
+  </div>
+</div>
+
+<script>
+/* ====== اسکریپت گیج‌های بخش اول (تنها کمی تغییر داده شد تا شیء gauge برگشت داده شود) ====== */
+function createGauge(idCanvas, idValue, value, maxValue, color1, color2, color3, animationSpeed = 45) {
+  const opts = {
+    angle: 0,
+    lineWidth: 0.3,
+    radiusScale: 1,
+    pointer: { length: 0.6, strokeWidth: 0.045, color: '#000' },
+    staticZones: [
+      {strokeStyle: color1, min: 0, max: maxValue * 0.4},
+      {strokeStyle: color2, min: maxValue * 0.4, max: maxValue * 0.7},
+      {strokeStyle: color3, min: maxValue * 0.7, max: maxValue}
+    ],
+    staticLabels: {
+      font: "14px sans-serif",
+      labels: [0, Math.round(maxValue/2), maxValue],
+      color: "#000",
+      fractionDigits: 0
+    },
+    highDpiSupport: true
+  };
+
+  const target = document.getElementById(idCanvas);
+  const gauge = new Gauge(target).setOptions(opts);
+  gauge.maxValue = maxValue;
+  gauge.setMinValue(0);
+  gauge.animationSpeed = animationSpeed;
+  gauge.set(value);
+  document.getElementById(idValue).textContent = value;
+  // <<< اینجا فقط یک مقدار بازگردانده می‌شود تا بتوانیم آن را بعداً آپدیت کنیم
+  return gauge;
+}
+
+/* ==== ایجاد گیج‌ها و نگهداری نمونه‌ها در متغیرها ==== */
+const gaugeHazerin = createGauge("gaugeHazerin", "valueHazerin", 23, 50, "#00b300", "#ffcc00", "#ff0000");
+const gaugeMorakhasiSaat = createGauge("gaugeMorakhasiSaat", "valueMorakhasiSaat", 4, 20, "#0088ff", "#33ccff", "#99ddff");
+const gaugeMamuriyatSaat = createGauge("gaugeMamuriyatSaat", "valueMamuriyatSaat", 6, 20, "#ff6600", "#ff9900", "#ffcc00");
+const gaugeMorakhasiRooz = createGauge("gaugeMorakhasiRooz", "valueMorakhasiRooz", 3, 20, "#0088ff", "#33ccff", "#99ddff");
+const gaugeMamuriyatRooz = createGauge("gaugeMamuriyatRooz", "valueMamuriyatRooz", 7, 20, "#ff6600", "#ff9900", "#ffcc00");
+
+/* ====== اسکریپت گیج‌های بخش دوم ====== */
+function createMiniGauge(canvasId, value, color) {
+  new Chart(document.getElementById(canvasId), {
+    type: 'doughnut',
+    data: {
+      datasets: [{
+        data: [value, 100 - value],
+        backgroundColor: [color, '#e9ecef'],
+        borderWidth: 0
+      }]
+    },
+    options: {
+      cutout: '80%',
+      plugins: {
+        legend: { display: false },
+        tooltip: { enabled: false },
+        title: {
+          display: true,
+          text: value + '%',
+          position: 'center',
+          color: '#333',
+          font: { size: 14, weight: 'bold' }
+        }
+      }
+    }
+  });
+}
+
+createMiniGauge('g1', 80, '#007bff');
+createMiniGauge('g2', 70, '#007bff');
+createMiniGauge('g3', 65, '#007bff');
+createMiniGauge('g4', 78, '#007bff');
+createMiniGauge('g5', 40, '#007bff');
+createMiniGauge('g6', 90, '#007bff');
+createMiniGauge('g7', 85, '#28a745');
+createMiniGauge('g8', 78, '#28a745');
+createMiniGauge('g9', 88, '#28a745');
+createMiniGauge('g10', 75, '#28a745');
+createMiniGauge('g11', 96, '#28a745');
+createMiniGauge('g12', 94, '#ffc107');
+createMiniGauge('g13', 70, '#ffc107');
+createMiniGauge('g14', 85, '#ffc107');
+createMiniGauge('g15', 82, '#17a2b8');
+createMiniGauge('g16', 60, '#17a2b8');
+createMiniGauge('g17', 90, '#17a2b8');
+
+/* ====== آپدیت خودکار هر ۵ ثانیه (تغییرات: یکی از دو گیج ساعتى را انتخاب کن، ۱ یا ۲ واحد +/- اعمال شود، و حاضرین معکوس آن تغییر کند) ====== */
+let valHazerin = 23;
+let valMorakhasiSaat = 4;
+let valMamuriyatSaat = 6;
+
+setInterval(() => {
+  // انتخاب گیج هدف (مرخصی یا ماموریت ساعتی)
+  const targetIsMorakhasi = Math.random() < 0.5;
+  // مقدار دلتا: 1 یا 2، و جهت + یا -
+  const magnitude = Math.random() < 0.5 ? 1 : 2;
+  const sign = Math.random() < 0.5 ? 1 : -1;
+  const delta = magnitude * sign;
+
+  if (targetIsMorakhasi) {
+    // اعمال دلتا و کنترل حدود (0..20)
+    valMorakhasiSaat = Math.max(0, Math.min(20, valMorakhasiSaat + delta));
+    // حاضرین به مقدار معکوس تغییر کند (اگر مرخصی افزایش یابد، حاضرین کاهش یابد)
+    valHazerin = Math.max(0, Math.min(50, valHazerin - delta));
+  } else {
+    valMamuriyatSaat = Math.max(0, Math.min(20, valMamuriyatSaat + delta));
+    valHazerin = Math.max(0, Math.min(50, valHazerin - delta));
+  }
+
+  // به‌روزرسانی گیج‌ها و متن‌های نمایشگر
+  gaugeHazerin.set(valHazerin);
+  document.getElementById("valueHazerin").textContent = valHazerin;
+
+  gaugeMorakhasiSaat.set(valMorakhasiSaat);
+  document.getElementById("valueMorakhasiSaat").textContent = valMorakhasiSaat;
+
+  gaugeMamuriyatSaat.set(valMamuriyatSaat);
+  document.getElementById("valueMamuriyatSaat").textContent = valMamuriyatSaat;
+
+}, 5000);
+</script>
+
+</body>
+</html>
