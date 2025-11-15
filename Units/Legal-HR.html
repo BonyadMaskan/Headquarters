@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>داشبورد امور پرسنلی و حقوقی بنیاد مسکن</title>
+    <!-- بارگذاری Tailwind CSS برای طراحی واکنش‌گرا و زیبا -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- بارگذاری فونت وزن‌دار وزیرمتن و Font Awesome برای آیکون‌ها -->
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!-- بارگذاری Chart.js برای نمودارها -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Vazirmatn', 'sans-serif'],
+                    },
+                    colors: {
+                        'bonyad-primary': '#1D4ED8', // Primary Blue for branding
+                        'bonyad-light': '#EFF6FF',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* تنظیمات عمومی و فونت */
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: #f4f7fa; /* پس‌زمینه روشن */
+        }
+        /* تضمین رندر صحیح نمودارها در داخل کارت‌ها */
+        .chart-container {
+            position: relative;
+            /* کاهش ارتفاع برای بهبود ظاهر کلی داشبورد */
+            height: 380px; 
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+
+    <!-- عنوان داشبورد -->
+    <header class="mb-10 text-center">
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-bonyad-primary mb-2 shadow-sm p-3 rounded-xl bg-white/70 backdrop-blur-sm">
+            داشبورد جامع امور پرسنلی و حقوقی
+        </h1>
+        <p class="text-gray-600 text-lg">تحلیل داده‌های کلان در حوزه منابع انسانی و دعاوی</p>
+    </header>
+
+    <!-- شبکه اصلی کارت‌ها (Grid) -->
+    <!-- تغییر از xl:grid-cols-4 به lg:grid-cols-3 برای کاهش فشردگی افقی -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <!-- تابع کمکی برای ایجاد کارت -->
+        <script>
+            function createCard(iconClass, title, canvasId, color) {
+                return `
+                    <div class="bg-white p-6 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-[1.01] border-t-4 border-${color}-500">
+                        <div class="flex items-start justify-between mb-4">
+                            <h3 class="text-xl font-semibold text-gray-800">${title}</h3>
+                            <i class="${iconClass} text-3xl text-${color}-500/80 p-2 rounded-full bg-${color}-50 border-2 border-${color}-100"></i>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="${canvasId}"></canvas>
+                        </div>
+                    </div>
+                `;
+            }
+        </script>
+        
+        <!-- ردیف اول: امور حقوقی -->
+        <script>
+            document.write(createCard('fa-solid fa-scale-balanced', 'آمار موضوعی پرونده‌های حقوقی', 'legalTopics', 'red'));
+            document.write(createCard('fa-solid fa-folder-open', 'توزیع پرونده‌های حقوقی (استان‌ها)', 'legalCases', 'orange'));
+            document.write(createCard('fa-solid fa-chart-column', 'مقایسه میانگین ارزشیابی کارکنان', 'evaluation', 'green'));
+        </script>
+
+        <!-- ردیف دوم: ارزیابی و بازنشستگی -->
+        <script>
+            document.write(createCard('fa-solid fa-users-line', 'پرسنل در شرف بازنشستگی (تا ۳ سال)', 'retire', 'indigo'));
+            document.write(createCard('fa-solid fa-user-clock', 'میانگین سن نیروی انسانی استان‌ها', 'age', 'teal'));
+            document.write(createCard('fa-solid fa-hourglass-half', 'میانگین سابقه خدمت پرسنل', 'experience', 'purple'));
+        </script>
+
+        <!-- ردیف سوم: ساختار نیروی انسانی -->
+        <script>
+            document.write(createCard('fa-solid fa-id-card', 'توزیع وضعیت استخدامی', 'employment', 'bonyad-primary'));
+            document.write(createCard('fa-solid fa-graduation-cap', 'مجموع ساعات آموزش (شش‌ماهه)', 'training', 'cyan'));
+            document.write(createCard('fa-solid fa-plane-departure', 'آمار مجموع مأموریت‌های استانی', 'missions', 'pink'));
+        </script>
+        
+        <!-- ردیف چهارم: مالی و تردد -->
+        <script>
+            document.write(createCard('fa-solid fa-money-check-dollar', 'میانگین حقوق به تفکیک واحدها (میلیون)', 'salary', 'amber'));
+            document.write(createCard('fa-solid fa-umbrella-beach', 'سرانه رفاهی (ریالی)', 'welfare', 'lime'));
+            document.write(createCard('fa-solid fa-chart-line', 'نمودار تردد ماهانه پرسنل', 'attendance', 'sky'));
+        </script>
+        
+    </div>
+
+    <script>
+        // تعریف رنگ‌های سازمانی و استاندارد برای نمودارها (به صورت کد Hex)
+        const PRIMARY_COLOR = '#1D4ED8';
+        const SECONDARY_COLOR = '#9333ea';
+        const TERTIARY_COLOR = '#f59e0b';
+        const CHART_COLORS = [
+            PRIMARY_COLOR, '#059669', '#DC2626', '#FACC15', '#6366F1', '#EC4899', '#0891B2',
+            '#F97316', '#34D399', '#EAB308', '#A855F7', '#EF4444', '#10B981', '#3B82F6', '#EF4444', '#7C3AED', '#CA8A04'
+        ];
+
+        // پیکربندی پیش‌فرض Chart.js برای RTL و فونت
+        Chart.defaults.font.family = 'Vazirmatn, sans-serif';
+        Chart.defaults.font.size = 12;
+        Chart.defaults.color = '#4B5563'; // رنگ متن نمودارها (خاکستری تیره)
+
+        // تنظیمات عمومی برای نمودارهای میله‌ای و خطی
+        const commonOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false, position: 'bottom', rtl: true, labels: { usePointStyle: true } },
+                tooltip: { rtl: true, bodyFont: { family: 'Vazirmatn' }, titleFont: { family: 'Vazirmatn', weight: 'bold' } }
+            },
+            scales: {
+                x: { ticks: { mirror: false, font: { family: 'Vazirmatn' } }, grid: { display: false } },
+                y: { ticks: { font: { family: 'Vazirmatn' } }, grid: { color: '#E5E7EB' } }
+            }
+        };
+
+        // داده‌های گسترش‌یافته برای استان‌ها (۱۶ استان)
+        const provinces = [
+            'تهران', 'اصفهان', 'خراسان رضوی', 'فارس', 'گیلان', 'مازندران', 'آذربایجان شرقی', 'کرمان', 
+            'یزد', 'قم', 'هرمزگان', 'کردستان', 'گلستان', 'سیستان و بلوچستان', 'البرز', 'خوزستان'
+        ];
+        const legalTopicsLabels = ['شکایات اشخاص', 'امور زمین و املاک', 'طرح‌های هادی', 'سنددار کردن (ماده ۱۴۷)', 'تخلفات اداری', 'سایر'];
+
+        // ====================================================================
+        // 1. آمار موضوعی پرونده‌های حقوقی (Doughnut Chart)
+        // ====================================================================
+        new Chart(document.getElementById('legalTopics'), {
+            type: 'doughnut',
+            data: {
+                labels: legalTopicsLabels,
+                datasets: [{
+                    label: 'درصد پرونده‌ها',
+                    data: [35, 25, 15, 10, 8, 7], // مجموع 100
+                    backgroundColor: [PRIMARY_COLOR, '#059669', '#F97316', '#DC2626', '#A855F7', '#0891B2'],
+                    hoverOffset: 8,
+                    borderWidth: 2,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '65%',
+                plugins: {
+                    legend: { position: 'bottom', rtl: true, labels: { usePointStyle: true } },
+                    tooltip: commonOptions.plugins.tooltip,
+                }
+            }
+        });
+
+        // ====================================================================
+        // 2. توزیع پرونده‌های حقوقی (Horizontal Bar Chart) - ۱۶ استان
+        // ====================================================================
+        new Chart(document.getElementById('legalCases'), {
+            type: 'bar',
+            data: {
+                labels: provinces, // استفاده از ۱۶ استان
+                datasets: [{
+                    label: 'تعداد پرونده',
+                    data: [85, 62, 70, 55, 48, 51, 90, 35, 40, 30, 28, 22, 19, 15, 45, 78], // ۱۶ داده فرضی
+                    backgroundColor: provinces.map((_, i) => CHART_COLORS[i % CHART_COLORS.length]),
+                    borderRadius: 8,
+                }]
+            },
+            options: {
+                ...commonOptions,
+                indexAxis: 'y', // نمودار افقی
+                scales: {
+                    x: { ...commonOptions.scales.x, title: { display: true, text: 'تعداد' } },
+                    y: { ...commonOptions.scales.y, grid: { display: false } }
+                }
+            }
+        });
+
+        // ====================================================================
+        // 3. مقایسه میانگین ارزشیابی (Bar Chart - Grouped)
+        // ====================================================================
+        new Chart(document.getElementById('evaluation'), {
+            type: 'bar',
+            data: {
+                labels: ['ستاد', 'تهران', 'خراسان رضوی', 'اصفهان', 'فارس', 'گیلان', 'یزد'],
+                datasets: [
+                    {
+                        label: 'دوره فعلی',
+                        data: [88.5, 82.3, 85.9, 79.1, 87.0, 75.8, 90.2],
+                        backgroundColor: PRIMARY_COLOR,
+                        borderRadius: 4,
+                    },
+                    {
+                        label: 'دوره قبل',
+                        data: [85.1, 80.5, 82.7, 76.5, 83.9, 72.1, 88.0],
+                        backgroundColor: '#93C5FD', // light blue
+                        borderRadius: 4,
+                    }
+                ]
+            },
+            options: {
+                ...commonOptions,
+                plugins: {
+                    ...commonOptions.plugins,
+                    legend: { display: true, position: 'bottom', rtl: true, labels: { usePointStyle: true } },
+                },
+                scales: {
+                    x: { ...commonOptions.scales.x, stacked: false },
+                    y: { ...commonOptions.scales.y, min: 60, max: 100, title: { display: true, text: 'امتیاز' } }
+                }
+            }
+        });
+
+        // ====================================================================
+        // 4. پرسنل در شرف بازنشستگی (Bar Chart) - ۱۰ استان
+        // ====================================================================
+        new Chart(document.getElementById('retire'), {
+            type: 'bar',
+            data: {
+                labels: provinces.slice(0, 10),
+                datasets: [{
+                    label: 'تعداد پرسنل',
+                    data: [28, 21, 19, 15, 12, 18, 14, 10, 8, 6], // ۱۰ داده فرضی
+                    backgroundColor: '#A855F7',
+                    borderRadius: 8,
+                }]
+            },
+            options: {
+                ...commonOptions,
+                scales: {
+                    x: { ...commonOptions.scales.x, grid: { display: false } },
+                    y: { ...commonOptions.scales.y, title: { display: true, text: 'نفر' } }
+                }
+            }
+        });
+
+        // ====================================================================
+        // 5. میانگین سن نیروی انسانی (Horizontal Bar Chart) - ۱۲ استان
+        // ====================================================================
+        new Chart(document.getElementById('age'), {
+            type: 'bar',
+            data: {
+                labels: provinces.slice(0, 12),
+                datasets: [{
+                    label: 'میانگین سن (سال)',
+                    data: [44.5, 41.8, 43.1, 42.5, 45.0, 41.2, 43.5, 43.8, 40.7, 42.2, 44.0, 41.5], // ۱۲ داده فرضی
+                    backgroundColor: '#14B8A6',
+                    borderRadius: 6,
+                }]
+            },
+            options: {
+                ...commonOptions,
+                indexAxis: 'y',
+                scales: {
+                    x: { ...commonOptions.scales.x, min: 35, max: 46, title: { display: true, text: 'سال' } },
+                    y: { ...commonOptions.scales.y, grid: { display: false } }
+                }
+            }
+        });
+
+        // ====================================================================
+        // 6. میانگین سابقه خدمت پرسنل (Bar Chart) - ۸ استان
+        // ====================================================================
+        new Chart(document.getElementById('experience'), {
+            type: 'bar',
+            data: {
+                labels: provinces.slice(0, 8),
+                datasets: [{
+                    label: 'میانگین سابقه (سال)',
+                    data: [17.5, 15.2, 16.8, 14.1, 13.9, 15.5, 18.0, 14.8], // ۸ داده فرضی
+                    backgroundColor: '#9333ea',
+                    borderRadius: 6,
+                }]
+            },
+            options: {
+                ...commonOptions,
+                scales: {
+                    x: { ...commonOptions.scales.x, grid: { display: false } },
+                    y: { ...commonOptions.scales.y, min: 10, max: 20, title: { display: true, text: 'سال' } }
+                }
+            }
+        });
+
+        // ====================================================================
+        // 7. وضعیت استخدامی نیروی انسانی (Pie Chart)
+        // ====================================================================
+        new Chart(document.getElementById('employment'), {
+            type: 'pie',
+            data: {
+                labels: ['رسمی قطعی', 'پیمانی', 'قرارداد کار معین', 'مشاوره‌ای/خدماتی'],
+                datasets: [{
+                    label: 'تعداد پرسنل',
+                    data: [580, 350, 480, 110],
+                    backgroundColor: [PRIMARY_COLOR, '#34D399', '#F97316', '#EF4444'],
+                    hoverOffset: 8,
+                    borderWidth: 2,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '65%',
+                plugins: {
+                    legend: { position: 'bottom', rtl: true, labels: { usePointStyle: true } },
+                    tooltip: commonOptions.plugins.tooltip,
+                }
+            }
+        });
+
+        // ====================================================================
+        // 8. ساعات آموزش استان‌ها (Horizontal Bar Chart) - ۱۲ استان
+        // ====================================================================
+        new Chart(document.getElementById('training'), {
+            type: 'bar',
+            data: {
+                labels: provinces.slice(0, 12),
+                datasets: [{
+                    label: 'مجموع ساعت آموزش',
+                    data: [550, 510, 480, 430, 400, 390, 370, 360, 340, 320, 300, 280], // ۱۲ داده فرضی
+                    backgroundColor: '#06B6D4',
+                    borderRadius: 8,
+                }]
+            },
+            options: {
+                ...commonOptions,
+                indexAxis: 'y',
+                scales: {
+                    x: { ...commonOptions.scales.x, title: { display: true, text: 'ساعت' } },
+                    y: { ...commonOptions.scales.y, grid: { display: false } }
+                }
+            }
+        });
+
+        // ====================================================================
+        // 9. مجموع مأموریت‌ها (Bar Chart) - ۱۰ استان
+        // ====================================================================
+        new Chart(document.getElementById('missions'), {
+            type: 'bar',
+            data: {
+                labels: ['ستاد', ...provinces.slice(0, 9)], // ستاد و ۹ استان
+                datasets: [{
+                    label: 'تعداد مأموریت',
+                    data: [120, 68, 75, 59, 52, 65, 60, 45, 55, 70], // ۱۰ داده فرضی
+                    backgroundColor: '#EC4899',
+                    borderRadius: 6,
+                }]
+            },
+            options: {
+                ...commonOptions,
+                scales: {
+                    x: { ...commonOptions.scales.x, grid: { display: false } },
+                    y: { ...commonOptions.scales.y, title: { display: true, text: 'تعداد' } }
+                }
+            }
+        });
+        
+        // ====================================================================
+        // 10. سرانه رفاهی (Bar Chart)
+        // ====================================================================
+        new Chart(document.getElementById('welfare'), {
+            type: 'bar',
+            data: {
+                labels: ['ستاد', 'تهران', 'گیلان', 'فارس', 'اصفهان', 'یزد'],
+                datasets: [{
+                    label: 'سرانه (میلیون ریال)',
+                    data: [4.5, 4.1, 3.8, 3.5, 3.2, 4.0],
+                    backgroundColor: '#84CC16',
+                    borderRadius: 6,
+                }]
+            },
+            options: {
+                ...commonOptions,
+                scales: {
+                    x: { ...commonOptions.scales.x, grid: { display: false } },
+                    y: { ...commonOptions.scales.y, title: { display: true, text: 'میلیون ریال' } }
+                }
+            }
+        });
+
+        // ====================================================================
+        // 11. میانگین حقوق به تفکیک واحدها (Bar Chart)
+        // ====================================================================
+        new Chart(document.getElementById('salary'), {
+            type: 'bar',
+            data: {
+                labels: ['ستاد مرکزی', 'کرمان', 'همدان', 'فارس', 'اصفهان', 'البرز'],
+                datasets: [{
+                    label: 'میانگین حقوق (میلیون تومان)',
+                    data: [42, 38, 36, 39, 40, 35],
+                    backgroundColor: '#F59E0B',
+                    borderRadius: 6,
+                }]
+            },
+            options: {
+                ...commonOptions,
+                scales: {
+                    x: { ...commonOptions.scales.x, grid: { display: false } },
+                    y: { ...commonOptions.scales.y, min: 30, max: 45, title: { display: true, text: 'میلیون تومان' } }
+                }
+            }
+        });
+
+        // ====================================================================
+        // 12. تردد ماهانه پرسنل (Line Chart)
+        // ====================================================================
+        new Chart(document.getElementById('attendance'), {
+            type: 'line',
+            data: {
+                labels: ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور'],
+                datasets: [
+                    {
+                        label: 'ستاد مرکزی',
+                        data: [820, 910, 880, 930, 950, 990],
+                        borderColor: PRIMARY_COLOR,
+                        backgroundColor: PRIMARY_COLOR + '20',
+                        fill: true,
+                        tension: 0.3,
+                    },
+                    {
+                        label: 'استان اصفهان',
+                        data: [740, 780, 760, 810, 830, 850],
+                        borderColor: '#059669',
+                        backgroundColor: '#059669' + '20',
+                        fill: true,
+                        tension: 0.3,
+                    },
+                    {
+                        label: 'استان تهران',
+                        data: [900, 950, 920, 980, 1000, 1050],
+                        borderColor: '#F97316',
+                        backgroundColor: '#F97316' + '20',
+                        fill: false,
+                        tension: 0.3,
+                    }
+                ]
+            },
+            options: {
+                ...commonOptions,
+                plugins: {
+                    ...commonOptions.plugins,
+                    legend: { display: true, position: 'bottom', rtl: true, labels: { usePointStyle: true } },
+                },
+                scales: {
+                    x: { ...commonOptions.scales.x, grid: { display: true } },
+                    y: { ...commonOptions.scales.y, min: 700, max: 1100, title: { display: true, text: 'تعداد تردد' } }
+                }
+            }
+        });
+
+    </script>
+</body>
+</html>
